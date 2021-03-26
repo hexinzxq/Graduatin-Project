@@ -1,7 +1,15 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../components/login.vue'
-import Home from '../components/home.vue'
+import adminHome from '../components/admin/adminHome.vue'
+import StuHome from '../components/student/stuHome.vue'
+import StuPrintExcel from '../components/student/stuPrintExcel.vue'
+import StuPersonalInfo from '../components/student/stuPersonalInfo.vue'
+import Welcome from '../components/welcome/Welcom.vue'
+import StuInfo from '../components/admin/stuInfo.vue'
+import AddStuInfo from '../components/admin/addStuInfo.vue'
+import StuPubish from '../components/admin/stuPublish.vue'
+import StuWelcome from '../components/welcome/StuWelcome.vue'
 
 Vue.use(VueRouter)
 
@@ -16,8 +24,46 @@ const routes = [
   },
   {
     path:'/home',
-    component:Home
-  }
+    component:adminHome,
+    redirect:'/welcome',
+    children:[
+      {
+        path:'/welcome',
+        component:Welcome
+      },
+      {
+        path:'/stuInfo',
+        component:StuInfo
+      },
+      {
+        path:'/addStuInfo',
+        component:AddStuInfo
+      },
+      {
+        path:'/stuPublish',
+        component:StuPubish
+      }
+    ]
+  },
+  {
+    path:'/stuhome',
+    component:StuHome,
+    redirect:'/stuWelcome',
+    children : [
+      {
+        path:'/stuWelcome',
+        component:StuWelcome
+      },
+      {
+        path:'/stuPersonalInfo',
+        component:StuPersonalInfo
+      },
+      {
+        path:'/stuPrintExcel',
+        component:StuPrintExcel
+      }
+    ]
+  },
 ]
 
 const router = new VueRouter({

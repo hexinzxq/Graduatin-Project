@@ -3,10 +3,10 @@
     <!-- 头部区域 -->
     <el-header>
       <div>
-        <img src="../assets/logo.png" alt="" />
+        <img src="@/assets/logo.png" alt="" />
         <span>大学生档案后台管理系统</span>
       </div>
-      <el-button type="info" @click="logout">退出</el-button>
+      <el-button type="warning" @click="logout" plain>退出</el-button>
     </el-header>
     <!-- 页面主体区域 -->
     <el-container>
@@ -19,21 +19,26 @@
           background-color="#333744"
           text-color="#fff"
           active-text-color="#409EFF"
-          :collapse = "isCollapse"
+          :collapse="isCollapse"
+          :router="true"
+          :default-active="activePath"
         >
-          <!-- 一级菜单 -->
-          <el-submenu index="1">
-            <!-- 一级菜单模板区域 -->
-            <template>
-              <!-- 图标 -->
-            </template>
-
-            <!-- 二级菜单 -->
-            <el-menu-item>
-              <!-- 图标 -->
-              <span></span>
-            </el-menu-item>
-          </el-submenu>
+          <el-menu-item index="/welcome">
+            <i class="el-icon-s-platform"></i>
+            <span slot="title">欢迎页面</span> 
+          </el-menu-item>
+          <el-menu-item index="/stuInfo">
+            <i class="el-icon-user-solid"></i>
+            <span slot="title">学生学籍信息查询</span>
+          </el-menu-item>
+          <el-menu-item index="/addStuInfo">
+            <i class="el-icon-circle-plus-outline"></i>
+            <span slot="title">学生学籍信息添加</span>
+          </el-menu-item>
+          <el-menu-item index="/stuPublish">
+            <i class="el-icon-notebook-1"></i>
+            <span slot="title">处分未销学生学籍</span>
+          </el-menu-item>
         </el-menu>
       </el-aside>
 
@@ -51,11 +56,16 @@ export default {
   data() {
     return {
       // 控制侧边栏目的收缩与展开
-      isCollapse : false
-    }
+      isCollapse: false,
+      // 默认激活属性
+      activePath: '',
+    };
+  },
+  created() {
+    
   },
   methods: {
-   async logout() {
+    async logout() {
       // 询问是否退出
       const confirmResult = await this.$confirm(
         "此操作直接退出系统, 是否退出?",
@@ -65,19 +75,19 @@ export default {
           cancelButtonText: "取消",
           type: "warning",
         }
-      ).catch((err) => err)
-       if (confirmResult !== "confirm") {
-        return this.$message.info("已撤销请求")
+      ).catch((err) => err);
+      if (confirmResult !== "confirm") {
+        return this.$message.info("已撤销请求");
       }
       //清除token重定向到登录页面
       window.sessionStorage.clear();
-      this.$message.success('成功退出当前页面')
+      this.$message.success("成功退出当前页面");
       this.$router.push("/login");
     },
     // 控制侧边栏目的收缩与展开
-    toggleCollapse(){
-      this.isCollapse = !this.isCollapse
-    }
+    toggleCollapse() {
+      this.isCollapse = !this.isCollapse;
+    },
   },
 };
 </script>
@@ -100,6 +110,7 @@ export default {
     img {
       border-radius: 50%;
       width: 40px;
+      height: 40px;
     }
   }
 }
@@ -108,7 +119,7 @@ export default {
 }
 .el-aside {
   background-color: #333744;
-  height: 100vh;
+  height: 92vh;
   .el-menu {
     border-right: none;
   }

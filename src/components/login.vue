@@ -3,7 +3,7 @@
     <div class="login_box">
       <!-- 头像区域 -->
       <div class="avator_box">
-        <img src="../assets/logo.png" alt="" />
+        <img src="@/assets/logo.png" alt="" />
       </div>
       <!-- 登录表单区域 -->
       <el-form
@@ -85,18 +85,20 @@ export default {
         if (!valid) return;
         const { data: res } = await this.$http.post("login", this.loginForm);
         // console.log(res);
-        if (res.err_code != 200) return this.$message.error('账号或密码错误')
+        if (res.err_code != 200) return this.$message.error("账号或密码错误");
         if (res.role.roleId == 1) {
-          this.$message.success("管理员登陆成功 ");         
+          this.$message.success("管理员登陆成功 ");
+          //1.将登录成功之后的token，保存到客户端的sessionStorage中
+          //1.1项目中除了登陆之外的其他API接口，必须在登录之后才能访问
+          //1.2token只应当在当前网站打开期间生效，所以将token保存在sessionStorage中
+          window.sessionStorage.setItem("token", res.message);
+          //2.通过编程式导航跳转到后台主页，路由地址是/home
+          this.$router.push("/home");
         } else if (res.role.roleId == 0) {
-          this.$message.success("学生登陆成功");
+          this.$message.success(res.role.stuName+"同学你好！欢迎你");
+          window.sessionStorage.setItem("token", res.message);
+          this.$router.push("/stuhome");
         }
-        //1.将登录成功之后的token，保存到客户端的sessionStorage中
-        //1.1项目中除了登陆之外的其他API接口，必须在登录之后才能访问
-        //1.2token只应当在当前网站打开期间生效，所以将token保存在sessionStorage中
-        window.sessionStorage.setItem("token", res.message);
-        //2.通过编程式导航跳转到后台主页，路由地址是/home
-        this.$router.push("/home");
       });
     },
   },
@@ -105,13 +107,13 @@ export default {
 
 <style lang="less" scoped>
 .login_container {
-  background-image: url('../assets/bacgroundimg.png');
+  background-image: url("../assets/bacgroundimg.png");
   background-repeat: no-repeat;
   background-size: 100%;
   height: 100vh;
 }
 
-.login_box { 
+.login_box {
   width: 450px;
   height: 300px;
   background-color: grey;
