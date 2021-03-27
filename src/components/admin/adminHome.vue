@@ -9,7 +9,7 @@
       <el-button type="warning" @click="logout" plain>退出</el-button>
     </el-header>
     <!-- 页面主体区域 -->
-    <el-container>
+    <el-container style="height: 500px;">
       <!-- 侧边栏 -->
       <el-aside :width="isCollapse ? '64px' : '200px'">
         <div class="toggle-button" @click="toggleCollapse">|||</div>
@@ -43,7 +43,7 @@
       </el-aside>
 
       <!-- 右侧内容主体 -->
-      <el-main>
+      <el-main style="height: 91vh;">
         <!-- 路由占位符 -->
         <router-view></router-view>
       </el-main>
@@ -119,7 +119,7 @@ export default {
 }
 .el-aside {
   background-color: #333744;
-  height: 92vh;
+  height: 91vh;
   .el-menu {
     border-right: none;
   }
