@@ -3,7 +3,7 @@
     <div class="login_box">
       <!-- 头像区域 -->
       <div class="avator_box">
-        <img src="@/assets/logo.png" alt="" />
+        <img src="https://z3.ax1x.com/2021/04/25/cxl5kj.png" alt="" />
       </div>
       <!-- 登录表单区域 -->
       <el-form
@@ -30,7 +30,12 @@
         </el-form-item>
         <!-- 按钮区域 -->
         <el-form-item class="btns">
-          <el-button type="primary" @click="login">登录</el-button>
+          <el-button
+            type="primary"
+            @click="login"
+            v-loading.fullscreen.lock="fullscreenLoading"
+            >登录</el-button
+          >
           <el-button type="info" @click="restLoginForm">重置</el-button>
         </el-form-item>
       </el-form>
@@ -43,6 +48,7 @@ export default {
   name: "Login",
   data() {
     return {
+      fullscreenLoading: false,
       // 登录表单的数据绑定对象
       loginForm: {
         loginName: "",
@@ -83,20 +89,41 @@ export default {
     login() {
       this.$refs.loginFormRef.validate(async (valid) => {
         if (!valid) return;
+        this.fullscreenLoading = true;
         const { data: res } = await this.$http.post("login", this.loginForm);
         // console.log(res);
-        if (res.err_code != 200) return this.$message.error("账号或密码错误");
+        if (res.err_code != 200){
+          this.$message.error("账号或密码错误")
+          this.fullscreenLoading = false
+        }
         if (res.role.roleId == 1) {
-          this.$message.success("管理员登陆成功 ");
+          this.fullscreenLoading = false
+          this.$notify({
+            title: "亲爱的管理员",
+            message: "新版本大学生档案管理系统欢迎您",
+            type: "success",
+          });
           //1.将登录成功之后的token，保存到客户端的sessionStorage中
           //1.1项目中除了登陆之外的其他API接口，必须在登录之后才能访问
           //1.2token只应当在当前网站打开期间生效，所以将token保存在sessionStorage中
-          window.sessionStorage.setItem("token", res.message);
+          window.sessionStorage.setItem("token", res.token);
           //2.通过编程式导航跳转到后台主页，路由地址是/home
           this.$router.push("/home");
         } else if (res.role.roleId == 0) {
-          this.$message.success(res.role.stuName+"同学你好！欢迎你");
-          window.sessionStorage.setItem("token", res.message);
+          this.fullscreenLoading = false;
+          // this.$message.success(res.role.stuName + "同学你好！欢迎你");
+          this.$notify({
+            title: "亲爱的" + res.role.stuName,
+            message: "欢迎回来",
+            type: "success",
+          });
+          window.sessionStorage.setItem("token", res.token);
+          //本地存储用户信息
+          window.localStorage.setItem(
+            "stu_enrollmentNumber",
+            res.role.stuEnrollmentNumber
+          );
+          window.localStorage.setItem("stu_name", res.role.stuName);
           this.$router.push("/stuhome");
         }
       });
@@ -107,7 +134,7 @@ export default {
 
 <style lang="less" scoped>
 .login_container {
-  background-image: url("../assets/bacgroundimg.png");
+  background-image: url(https://z3.ax1x.com/2021/04/28/gihrZj.jpg);
   background-repeat: no-repeat;
   background-size: 100%;
   height: 100vh;

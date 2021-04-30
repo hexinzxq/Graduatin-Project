@@ -3,22 +3,25 @@
     <!-- 头部区域 -->
     <el-header>
       <div>
-        <img src="@/assets/logo.png" alt="" />
-        <span>大学生档案系统个人中心</span>
+        <img src="https://z3.ax1x.com/2021/04/25/cxl5kj.png" alt="" />
+        <span>个人中心</span>
       </div>
-      <el-button type="warning" @click="logout" plain>退出</el-button>
+      <el-button
+        type="danger"
+        @click="logout"
+        plain
+        icon="el-icon-switch-button"
+        >退出</el-button
+      >
     </el-header>
     <!-- 页面主体区域 -->
-    <el-container>
+    <el-container style="height: 100vh">
       <!-- 侧边栏 -->
-      <el-aside :width="isCollapse ? '64px' : '200px'">
+      <el-aside :width="isCollapse ? '64px' : '200px'" style="height: 100vh">
         <div class="toggle-button" @click="toggleCollapse">|||</div>
 
         <!-- 侧边栏菜单区域 -->
         <el-menu
-          background-color="#333744"
-          text-color="#fff"
-          active-text-color="#409EFF"
           :collapse="isCollapse"
           :router="true"
           :default-active="activePath"
@@ -28,18 +31,30 @@
             <span slot="title">欢迎页面</span>
           </el-menu-item>
           <el-menu-item index="/stuPersonalInfo">
+            <i class="el-icon-menu"></i>
+            <span slot="title">我的学籍信息</span>
+          </el-menu-item>
+          <el-menu-item index="/stuPersonalReport">
+            <i class="el-icon-s-finance"></i>
+            <span slot="title">我的申报内容</span>
+          </el-menu-item>
+          <el-menu-item index="/stuPersonalHonor">
             <i class="el-icon-user-solid"></i>
-            <span slot="title">本人学籍信息查看</span>
+            <span slot="title">我的荣誉</span>
+          </el-menu-item>
+          <el-menu-item index="/stuPersonalPublish">
+            <i class="el-icon-s-release"></i>
+            <span slot="title">我的处分</span>
           </el-menu-item>
           <el-menu-item index="/stuPrintExcel">
             <i class="el-icon-download"></i>
-            <span slot="title">成绩表打印</span>
+            <span slot="title">我的成绩表</span>
           </el-menu-item>
         </el-menu>
       </el-aside>
 
       <!-- 右侧内容主体 -->
-      <el-main>
+      <el-main style="height: 100vh">
         <!-- 路由占位符 -->
         <router-view></router-view>
       </el-main>
@@ -54,7 +69,7 @@ export default {
       // 控制侧边栏目的收缩与展开
       isCollapse: false,
       // 默认激活属性
-      activePath: "",
+      activePath: "/stuWelcome",
     };
   },
   created() {},
@@ -62,7 +77,7 @@ export default {
     async logout() {
       // 询问是否退出
       const confirmResult = await this.$confirm(
-        "此操作直接退出系统, 是否退出?",
+        "亲爱的"+localStorage.getItem('stu_name')+",真的要退出吗?",
         "提示",
         {
           confirmButtonText: "确定",
@@ -88,7 +103,7 @@ export default {
 
 <style lang="less" scoped>
 .el-header {
-  background-color: #373d41;
+  background: linear-gradient(to right, #70e1f5, #ffd194);
   display: flex;
   justify-content: space-between;
   padding-left: 10px;
@@ -112,20 +127,24 @@ export default {
   height: 100%;
 }
 .el-aside {
-  background-color: #333744;
+  background: linear-gradient(to right, #70e1f5, #ffd194);
   height: 92vh;
   .el-menu {
+    background: linear-gradient(to right, #70e1f5, #ffd194);
+    background-color: "#333744";
+    text-color: "#fff";
+    active-text-color: "#409EFF";
     border-right: none;
   }
 }
 .el-main {
-  background-color: #eaedf1;
+  background: linear-gradient(to right, #70e1f5, #ffd194);
 }
 .iconfont {
   margin-right: 10px;
 }
 .toggle-button {
-  background-color: #4a5064;
+  background: linear-gradient(to right, #70e1f5, #ffd194);
   font-size: 10px;
   line-height: 24px;
   color: #fff;
