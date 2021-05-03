@@ -13,7 +13,9 @@ import './assets/fonts/iconfont.css'
 
 import axios from 'axios'
 // 配置请求的根路径
+// 生产环境接口
 // axios.defaults.baseURL = 'http://8.136.220.192:8888/'
+// 开发环境接口
 axios.defaults.baseURL = 'http://127.0.0.1:8888/'
 axios.defaults.timeout =  9000
 axios.interceptors.request.use(config => {
