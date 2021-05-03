@@ -2,7 +2,7 @@
   <div>
     <!-- 面包屑导航 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/stuHome' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>个人中心</el-breadcrumb-item>
       <el-breadcrumb-item>我的成绩表</el-breadcrumb-item>
     </el-breadcrumb>
@@ -94,6 +94,7 @@ export default {
       return jsonData.map((v) => filterVal.map((j) => v[j]));
     },
     async getPoint() {
+      // console.log(localStorage.getItem("stu_passKey"));
       this.loading= true
       // console.log(this.value);
       if (this.value === "") {

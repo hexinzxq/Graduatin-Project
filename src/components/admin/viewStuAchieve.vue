@@ -25,7 +25,7 @@
             icon="el-icon-search"
             >查询</el-button
           >
-          <el-button type="primary" icon="el-icon-refresh" @click="reset()"
+          <el-button type="warning" icon="el-icon-refresh" @click="reset()"
             >重置</el-button
           >
           <el-upload
@@ -36,7 +36,7 @@
             :on-change="handleUpload"
             ref="upload"
           >
-            <el-button type="primary" icon="el-icon-upload2" @click="reset()"
+            <el-button type="success" icon="el-icon-upload2" @click="reset()"
               >批量导入</el-button
             >
           </el-upload>
@@ -105,7 +105,7 @@
 
         <!-- 导出导入操作区域 -->
         <el-button
-          type="primary"
+          type="success"
           @click="exportStudentPoint"
           icon="el-icon-download"
           >导出</el-button
@@ -257,10 +257,12 @@ export default {
             .post("/graduate-project/importExcel", that.excelData)
             .then((res) => {
               if (res.data.success) {
+                that.$refs.upload.clearFiles();
                 that.$message.success("导入成功");
                 that.getPoint();
                 this.loading= false
               } else {
+                that.$refs.upload.clearFiles();
                 that.$message.error("导入失败");
               }
             });
@@ -289,8 +291,13 @@ export default {
     },
     // 获取对应的学生的成绩表信息
     async getPoint() {
+      this.loading= true
       // console.log(this.value);
-      if (this.value == 1) {
+      if (this.value == "") {
+        this.$message.warning('请选择查询区间')
+        this.loading= false
+      }
+      else if (this.value == 1) {
         const { data: res } = await this.$http.get(
           "/graduate-project/getFirstPoint?stuEnrollmentNumber=" +
             this.pointQueryParam
@@ -298,7 +305,7 @@ export default {
         if (res.status !== 200) {
           this.$message.error("出了点错误，紧急修复中");
         } else {
-          console.log(res.result);
+          // console.log(res.result);
           this.dataSource = res.result;
           this.loading= false
         }

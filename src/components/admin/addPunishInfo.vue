@@ -49,7 +49,7 @@
           v-loading.fullscreen.lock="fullscreenLoading"
           ><i class="el-icon-circle-plus"></i>新增</el-button
         >
-        <el-button type="info" @click="resetInfo('addFormRules')"
+        <el-button type="warning" @click="resetInfo('addFormRules')"
           ><i class="el-icon-refresh-right"></i>重置</el-button
         >
       </el-row>

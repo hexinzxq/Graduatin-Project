@@ -15,7 +15,7 @@ import axios from 'axios'
 // 配置请求的根路径
 // axios.defaults.baseURL = 'http://8.136.220.192:8888/'
 axios.defaults.baseURL = 'http://127.0.0.1:8888/'
-// axios.defaults.timeout =  9000
+axios.defaults.timeout =  9000
 axios.interceptors.request.use(config => {
   // console.log(config);
   config.headers.Authorization = window.sessionStorage.getItem('token')

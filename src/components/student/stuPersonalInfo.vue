@@ -2,7 +2,7 @@
   <div>
     <!-- 面包屑导航 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/stuHome' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>个人中心</el-breadcrumb-item>
       <el-breadcrumb-item>我的学籍信息</el-breadcrumb-item>
     </el-breadcrumb>
@@ -107,7 +107,7 @@
     </el-dialog>
 
     <!-- 学籍信息审核对话框 -->
-    <el-dialog title="信息审核" :visible.sync="viewDialogVisible" fullscreen="true">
+    <el-dialog title="信息审核" :visible.sync="viewDialogVisible" :fullscreen="isFull">
       <!-- 内容主体区域 -->
       <el-form :model="viewForm" ref="viewFormRef" label-width="70px">
         <el-form-item label="学籍号">
@@ -223,6 +223,7 @@ export default {
   name: "stuPersonalInfo",
   data() {
     return {
+      isFull: true,
       fullscreenLoading: false,
       loading: false,
       errFormRules: {

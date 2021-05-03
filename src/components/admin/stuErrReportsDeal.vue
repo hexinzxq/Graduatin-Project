@@ -70,7 +70,7 @@
       @close="editDialogClosed"
       title="申报信息处理"
       :visible.sync="editDialogVisible"
-      fullscreen= "true"
+      fullscreen
     >
       <!-- 内容主体区域 -->
       <el-form
@@ -159,6 +159,7 @@ export default {
   name: "app",
   data() {
     return {
+      isFullscreen: true,
       loading: false,
       fullscreenLoading: false,
       editDialogVisible: false,

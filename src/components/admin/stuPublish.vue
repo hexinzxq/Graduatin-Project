@@ -20,10 +20,10 @@
           </el-input>
         </el-col>
         <el-col :span="8">
-          <el-button type="primary" @click="searchPublishInfo()"
+          <el-button type="primary" @click="searchPublishInfo()" icon="el-icon-search"
             >搜索</el-button
           >
-          <el-button type="info" @click="reset()"
+          <el-button type="warning" @click="reset()" icon="el-icon-refresh-right"
             >重置</el-button
           >
         </el-col>
@@ -163,7 +163,7 @@ export default {
   methods: {
     // 处理预览学生受罚信息
     async viewPunishment(row) {
-      this.fullscreenLoading = true
+      this.fullscreenLoading = true;
       // console.log(row.stuEnrollmentNumber);
       const { data: res } = await this.$http.get(
         "/graduate-project-punish/viewPunish?stuEnrollmentNumber=" +
@@ -176,8 +176,8 @@ export default {
         // console.log(row);
         this.stuPunishment = row.stuPunishment;
         this.viewTableData = res.result;
-        this.$message.success(res.message);
-        this.fullscreenLoading = false
+        // this.$message.success(res.message);
+        this.fullscreenLoading = false;
         this.viewDialogVisible = true;
       }
     },
@@ -185,10 +185,10 @@ export default {
       this.viewDialogVisible = false;
     },
     reset() {
-      this.loading= true
-      this.stuName = ""
-      this.getPulishStudentsInfo()
-      this.loading= false
+      this.loading = true;
+      this.stuName = "";
+      this.getPulishStudentsInfo();
+      this.loading = false;
     },
     // 处理搜索相关学生信息
     async searchPublishInfo() {
@@ -235,7 +235,7 @@ export default {
       if (confirmResult !== "confirm") {
         return this.$message.info("已取消");
       }
-      this.fullscreenLoading = true
+      this.fullscreenLoading = true;
       const { data: res } = await this.$http.delete(
         "/graduate-project/cancelStuPublish?stuEnrollmentNumber=" + row._id
       );
@@ -248,7 +248,7 @@ export default {
       this.viewDialogClosed();
       this.deletePunish(row);
       this.getPulishStudentsInfo();
-      this.fullscreenLoading = false
+      this.fullscreenLoading = false;
     },
     async deletePunish(row) {
       const { data: res } = await this.$http.delete(

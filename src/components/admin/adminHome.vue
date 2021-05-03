@@ -25,6 +25,7 @@
           :collapse="isCollapse"
           :router="true"
           :default-active="activePath"
+          :collapse-transition="false"
         >
           <el-menu-item index="/welcome">
             <i class="el-icon-s-platform"></i>

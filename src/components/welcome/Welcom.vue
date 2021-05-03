@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-carousel type="card" height="80vh" :autoplay="true" loop>
+    <el-carousel type="card" height="80vh" :autoplay="isAuto" loop>
       <el-carousel-item v-for="(img,index) in imgList">
         <img v-bind:src="img.url">
       </el-carousel-item>
@@ -13,6 +13,7 @@ export default {
   name: "Welcome",
   data() {
     return {
+      isAuto: true,
       imgList: [
         {url: 'https://z3.ax1x.com/2021/03/27/cSSgeI.png'},
         {url: 'https://z3.ax1x.com/2021/03/27/cSm3EF.png'},

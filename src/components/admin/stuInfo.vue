@@ -10,7 +10,7 @@
     <!-- 卡片视图 -->
     <el-card>
       <el-row :gutter="20">
-        <el-col :span="8">
+        <el-col :span="5">
           <!-- 搜索区域 -->
           <el-input
             :clearable="true"
@@ -19,7 +19,7 @@
           >
           </el-input>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="5">
           <!-- 搜索区域 -->
           <el-input
             :clearable="true"
@@ -29,13 +29,35 @@
           </el-input>
         </el-col>
         <el-col :span="8">
-          <el-button type="primary" @click="searchStuInfo()">搜索</el-button>
-          <el-button type="info" @click="resetFileds()">重置</el-button>
+          <el-button
+            type="primary"
+            icon="el-icon-search"
+            @click="searchStuInfo()"
+            >搜索</el-button
+          >
+          <el-button
+            type="warning"
+            icon="el-icon-refresh-right"
+            @click="resetFileds()"
+            >重置</el-button
+          >
+          <el-upload
+            style="margin-top: -40px; margin-left: 200px"
+            :auto-upload="false"
+            action="#"
+            :limit="1"
+            :on-change="handleUpload"
+            ref="upload"
+          >
+            <el-button type="success" icon="el-icon-upload2"
+              >批量导入</el-button
+            >
+          </el-upload>
         </el-col>
       </el-row>
 
       <!-- 用户列表区域 -->
-      <el-table border stripe :data="dataSource" :loading="isLoading">
+      <el-table border stripe :data="dataSource" v-loading="isLoading">
         <el-table-column label="#" type="index"></el-table-column>
         <el-table-column
           label="学籍号"
@@ -127,6 +149,8 @@
         @current-change="handleCurrentChange"
       >
       </el-pagination>
+
+      <!-- <img :src="AvartarData.src1" alt="" id="avartar"> -->
     </el-card>
     <!-- 编辑学籍信息对话框 -->
     <el-dialog
@@ -218,10 +242,14 @@
 </template>
 
 <script>
+import XLSX from "../../../node_modules/xlsx/xlsx";
 export default {
   name: "Welcome",
   data() {
     return {
+      AvartarData: {
+        src1: "https://z3.ax1x.com/2021/05/01/gVXtxS.jpg",
+      },
       // 编辑对话框的可见性属性
       editDialogVisible: false,
 
@@ -380,15 +408,91 @@ export default {
           "/graduate-project/searchStuInfoByEnrollmentNumber",
         searchStuInfo: "/graduate-project/searchStuInfo",
       },
+      // 存放要上传的表格数据
+      excelData: [],
     };
   },
   mounted() {
-    this.$emit("getStuInfoList", this.getStuInfoList());
+    this.getStuInfoList();
+    // this.$emit("getStuInfoList", this.getStuInfoList());
   },
   methods: {
+    // 上传学生学籍信息
+    async handleUpload(file) {
+      let that = this;
+      // 判断上传类型是否为Excel
+      if (
+        file.raw.type !=
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" &&
+        file.raw.type != "application/vnd.ms-excel"
+      ) {
+        this.$notify.error({
+          title: "出错啦",
+          message: "请上传学生学籍表文件(Excel文件)",
+        });
+        this.$refs.upload.clearFiles();
+        return false;
+      }
+      //读取文件
+      let reader = new FileReader();
+      let flag =
+        typeof FileReader !== "undefined" &&
+        (FileReader.prototype || {}).readAsBinaryString;
+      if (flag) {
+        reader.readAsBinaryString(file.raw);
+      } else {
+        reader.readAsArrayBuffer(file.raw);
+      }
+      reader.onload = await function (e) {
+        let data = e.target.result;
+        let workBook = XLSX.read(data, { type: "binary" });
+        workBook.SheetNames.forEach(function (name) {
+          var XL_row_object = XLSX.utils.sheet_to_row_object_array(
+            workBook.Sheets[name]
+          );
+          if (XL_row_object.length > 0) {
+            that.excelData = JSON.parse(JSON.stringify(XL_row_object));
+          }
+          console.log(that.excelData);
+          // 处理数据，将json对象转换为数据库需要的对象
+          // that.excelData.forEach((item, index) => {
+          //   let obj = {};
+          //   for (let i in item) {
+          //     if (i !== "stuEnrollmentNumber" && i !== "stuName") {
+          //       obj[i] = item[i];
+          //       delete item[i];
+          //     }
+          //   }
+          //   item.grade = obj;
+          // });
+          that.isLoading = true;
+          that.$http
+            .post("/graduate-project/importStuInfo", that.excelData)
+            .then((res) => {
+              if (res.data.success) {
+                that.$refs.upload.clearFiles();
+                that.$message.success("导入学籍信息成功");
+                that.getStuInfoList();
+                that.isLoading = false;
+              } else {
+                that.$refs.upload.clearFiles();
+                that.$message.error("导入失败");
+              }
+            })
+            .catch(() => {
+              that.$refs.upload.clearFiles();
+              that.$notify.error({
+                title: "出错",
+                message: "学籍表中有学生已经在籍，请检查",
+              });
+              that.isLoading = false
+            });
+        });
+      };
+    },
     // 监听编辑对话框关闭事件
     editDialogClosed() {
-      this.$refs.editFormRef.resetFields(); 
+      this.$refs.editFormRef.resetFields();
     },
 
     // 处理提交编辑结果更新学籍信息列表
@@ -512,7 +616,7 @@ export default {
       if (res.status === 200) {
         // console.log(res);
         this.dataSource = res.result;
-        this.total = res.total
+        this.total = res.total;
         this.$message.success(res.message);
         this.isLoading = false;
       }
@@ -550,6 +654,8 @@ export default {
             value.stuPoliticsStatus = "中共党员";
           }
         });
+        // console.log(res.result[0].stuAvatar);
+        // this.AvartarData.src1 = res.result[0].stuAvatar
         this.isLoading = false;
         // console.log(this.dataSource);
         // this.dataSource = res.result;
@@ -613,5 +719,10 @@ export default {
 }
 body {
   margin: 0;
+}
+#avartar {
+  height: 200px;
+  width: 200px;
+  background-color: blue;
 }
 </style>

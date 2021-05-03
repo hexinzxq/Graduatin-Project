@@ -92,15 +92,21 @@
           <el-button type="primary">点击新增学籍信息</el-button>
         </el-form-item> -->
       </el-form>
-      <el-button
-        type="primary"
-        @click="addStudentInfo()"
-        v-loading.fullscreen.lock="fullscreenLoading"
-        >新增学籍信息</el-button
-      >
-      <el-button type="info" @click="resetInfo('addFormRules')"
-        >重置表单信息</el-button
-      >
+      <div style="float: right; margin-bottom: 10px">
+        <el-button
+          type="primary"
+          @click="addStudentInfo()"
+          v-loading.fullscreen.lock="fullscreenLoading"
+          icon="el-icon-circle-plus"
+          >新增</el-button
+        >
+        <el-button
+          type="warning"
+          @click="resetInfo('addFormRules')"
+          icon="el-icon-refresh-right"
+          >重置</el-button
+        >
+      </div>
     </el-card>
   </div>
 </template>

@@ -3,7 +3,7 @@
     <!-- 头部区域 -->
     <el-header>
       <div>
-        <img src="https://z3.ax1x.com/2021/04/25/cxl5kj.png" alt="" />
+        <img :src="avartarSrc" alt="">
         <span>个人中心</span>
       </div>
       <el-button
@@ -25,6 +25,7 @@
           :collapse="isCollapse"
           :router="true"
           :default-active="activePath"
+          :collapse-transition="false"
         >
           <el-menu-item index="/stuWelcome">
             <i class="el-icon-s-platform"></i>
@@ -50,6 +51,14 @@
             <i class="el-icon-download"></i>
             <span slot="title">我的成绩表</span>
           </el-menu-item>
+          <!-- <el-menu-item index="/stuMaterials">
+            <i class="el-icon-star-on"></i>
+            <span slot="title">我的资料</span> -->
+          </el-menu-item>
+          <el-menu-item index="/passwordService">
+            <i class="el-icon-s-tools"></i>
+            <span slot="title">趣味中心</span>
+          </el-menu-item>
         </el-menu>
       </el-aside>
 
@@ -66,13 +75,21 @@
 export default {
   data() {
     return {
+      // 头像src属性
+      avartarSrc: "",
       // 控制侧边栏目的收缩与展开
       isCollapse: false,
       // 默认激活属性
       activePath: "/stuWelcome",
     };
   },
-  created() {},
+  mounted() {
+    this.avartarSrc= localStorage.getItem("avartar_src")
+    // console.log(this.avartarSrc);
+  },
+  created() {
+    this.avartarSrc= localStorage.getItem("avartar_src")
+  },
   methods: {
     async logout() {
       // 询问是否退出

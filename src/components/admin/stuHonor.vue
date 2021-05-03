@@ -20,10 +20,10 @@
           </el-input>
         </el-col>
         <el-col :span="8">
-          <el-button type="primary" @click="searchPublishInfo()"
+          <el-button type="primary" @click="searchPublishInfo()" icon="el-icon-search"
             >搜索</el-button
           >
-          <el-button type="info" @click="reset()"
+          <el-button type="warning" @click="reset()" icon="el-icon-refresh-right"
             >重置</el-button
           >
         </el-col>
@@ -146,7 +146,7 @@ export default {
       } else if (res.status === 200) {
         // console.log(res.result);
         this.viewTableData = res.result;
-        this.$message.success(res.message);
+        // this.$message.success(res.message);
         this.viewDialogVisible = true;
         this.fullscreenLoading = false
       }

@@ -19,6 +19,8 @@ import viewStuAchieve from '../components/admin/viewStuAchieve.vue'
 import printStuAchieve from '../components/admin/printStuAchieve.vue'
 import StuErrReportInfo from '../components/student/stuErrReportInfo.vue'
 import StuErrReportDeal from '../components/admin/stuErrReportsDeal.vue'
+import PasswordService from '../components/student/passwordService.vue'
+import MyMaterials from '../components/student/stuMaterials.vue'
 
 Vue.use(VueRouter)
 
@@ -103,6 +105,14 @@ const routes = [{
       {
         path: '/stuPersonalReport',
         component: StuErrReportInfo
+      },
+      {
+        path: '/passwordService',
+        component: PasswordService
+      },
+      {
+        path: '/stuMaterials',
+        component: MyMaterials,
       }
     ]
   },
