@@ -240,7 +240,7 @@ export default {
           if (XL_row_object.length > 0) {
             that.excelData = JSON.parse(JSON.stringify(XL_row_object));
           }
-          console.log(that.excelData);
+          // console.log(that.excelData);
           // 处理数据，将json对象转换为数据库需要的对象
           // that.excelData.forEach((item, index) => {
           //   let obj = {};
@@ -252,7 +252,7 @@ export default {
           //   }
           //   item.grade = obj;
           // });
-          this.loading= true
+          that.loading= true
           that.$http
             .post("/graduate-project/importExcel", that.excelData)
             .then((res) => {
@@ -260,7 +260,7 @@ export default {
                 that.$refs.upload.clearFiles();
                 that.$message.success("导入成功");
                 that.getPoint();
-                this.loading= false
+                that.loading= false
               } else {
                 that.$refs.upload.clearFiles();
                 that.$message.error("导入失败");
@@ -294,7 +294,7 @@ export default {
       this.loading= true
       // console.log(this.value);
       if (this.value == "") {
-        this.$message.warning('请选择查询区间')
+        // this.$message.warning('请选择查询区间')
         this.loading= false
       }
       else if (this.value == 1) {

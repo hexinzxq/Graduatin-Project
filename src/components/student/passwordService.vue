@@ -58,7 +58,18 @@
         <el-tab-pane label="日历查看" name="third">
           <el-calendar v-model="value"> </el-calendar>
         </el-tab-pane>
-        <!-- <el-tab-pane label="校园风光" name="fourth">校园风光</el-tab-pane> -->
+        <!-- <el-tab-pane label="校园风光" name="fourth">
+          <el-upload
+            class="avatar-uploader"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload"
+          >
+            <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+        </el-tab-pane> -->
         <el-tab-pane label="学习资料" name="fifth">
           <h1>所有资料均来自哔哩哔哩最热门教程资源......</h1>
           <el-collapse accordion>
@@ -301,6 +312,7 @@ export default {
   name: "app",
   data() {
     return {
+      imageUrl: '',
       isShowPas: true,
       value: new Date(),
       activeName: "first",
@@ -348,6 +360,21 @@ export default {
     };
   },
   methods: {
+    handleAvatarSuccess(res, file) {
+        this.imageUrl = URL.createObjectURL(file.raw);
+      },
+      beforeAvatarUpload(file) {
+        const isJPG = file.type === 'image/jpeg';
+        const isLt2M = file.size / 1024 / 1024 < 2;
+
+        if (!isJPG) {
+          this.$message.error('上传头像图片只能是 JPG 格式!');
+        }
+        if (!isLt2M) {
+          this.$message.error('上传头像图片大小不能超过 2MB!');
+        }
+        return isJPG && isLt2M;
+      },
     // 重置表单信息操作
     resetInfo(modifyPasRefs) {
       this.$refs[modifyPasRefs].resetFields();
@@ -407,5 +434,28 @@ export default {
 <style scoped>
 .btns {
   float: right;
+}
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
 }
 </style>
